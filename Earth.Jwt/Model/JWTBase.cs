@@ -71,7 +71,7 @@ namespace Earth.Jwt.Model
             return GetEnumerator();
         }
 
-        public bool IsEmput
+        public bool IsEmpty
         {
             get
             {

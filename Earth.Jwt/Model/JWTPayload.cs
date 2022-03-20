@@ -1,18 +1,20 @@
-﻿using Earth.Jwt.Common;
-using Earth.Jwt.Encryption;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Unicode;
 using System.Threading.Tasks;
+using Earth.Jwt.Common;
+using Earth.Jwt.Encryption;
 
 namespace Earth.Jwt.Model
 {
     /// <summary>
     /// JWTPayload
     /// </summary>
-    public class JWTPayload<T> : JWTBase where T : class
+    public class JWTPayload<T> :  JWTBase where T : class
     {
         public T Data { get; set; }
 
@@ -20,8 +22,8 @@ namespace Earth.Jwt.Model
         /// JWTPayload
         /// </summary>
         public JWTPayload()
-        {
-
+        { 
+          
         }
 
         /// <summary>
@@ -33,7 +35,10 @@ namespace Earth.Jwt.Model
             this["exp"] = JwtDateTime.Now.AddSeconds(timeoutSencond).GetTimeStampStr();
             if (t != null)
                 if (t.GetType() != typeof(string))
-                    this["data"] = JsonSerializer.Serialize(t).Replace("\"", "\\\"");
+                this["data"] = JsonSerializer.Serialize(t, new JsonSerializerOptions()
+                {
+                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
+                }).Replace("\"", "\\\"");
                 else
                     this["jti"] = t.ToString();
 
@@ -66,7 +71,7 @@ namespace Earth.Jwt.Model
                 payload.Data = payload["jti"] as T;
                 return payload;
             }
-
+            
         }
 
         public virtual string ToBase64Str(Encoding encoding)

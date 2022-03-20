@@ -1,10 +1,10 @@
-﻿using Earth.Jwt.Encryption;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Earth.Jwt.Encryption;
 
 namespace Earth.Jwt.Model
 {
@@ -20,7 +20,7 @@ namespace Earth.Jwt.Model
             if (!string.IsNullOrWhiteSpace(typ))
             {
                 TryAdd("typ", typ);
-            }
+            }  
         }
 
         public virtual JWTHeader Parse(string base64Str, Encoding encoding)

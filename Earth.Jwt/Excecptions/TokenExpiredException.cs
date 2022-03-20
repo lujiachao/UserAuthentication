@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Earth.Jwt.Model;
 
-namespace Earth.Jwt.Excecptions
+namespace Earth.Jwt.Exceptions
 {
     /// <summary>
     /// Token过期异常

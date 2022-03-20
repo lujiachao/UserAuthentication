@@ -1,11 +1,11 @@
-﻿using Earth.Jwt.Encryption;
-using Earth.Jwt.Excecptions;
-using Earth.Jwt.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Earth.Jwt.Encryption;
+using Earth.Jwt.Exceptions;
+using Earth.Jwt.Model;
 
 namespace Earth.Jwt
 {
@@ -16,6 +16,8 @@ namespace Earth.Jwt
     public class JWTPackage<T> where T : class
     {
         public const string Prex = "Bearer ";
+
+        public const string DefaultKey = "Authorization";
 
         protected Encoding _encoding;
 
@@ -89,10 +91,40 @@ namespace Earth.Jwt
         /// <summary>
         /// 获取http header键值对
         /// </summary>
+        /// <param name="PrexSignature">带prex的jwt串</param>
+        /// <param name="prex">prex值</param>
         /// <returns></returns>
-        public virtual KeyValuePair<string, string> GetAuthorizationBearer()
+        public virtual KeyValuePair<string, string> GetAuthorizationPrex(string prex = Prex, string key = DefaultKey)
         {
-            return new KeyValuePair<string, string>("Authorization", $"{Prex}{Signature}");
+            return new KeyValuePair<string, string>(key, $"{prex}{Signature}");
+        }
+
+        /// <summary>
+        /// 分离http header键值对
+        /// </summary>
+        /// <param name="PrexSignature">带prex的jwt串</param>
+        /// <param name="prex">prex值</param>
+        /// <returns></returns>
+        public virtual string ResolveAuthorizationPrex(string PrexSignature, string prex = Prex)
+        {
+            if (PrexSignature.Substring(0, prex.Length) != prex)
+            {
+                throw new IllegalTokenException("PrexSignature is not equip prex");
+            }
+            return PrexSignature.Substring(prex.Length);
+        }
+
+        public virtual string ResolveAuthorizationPrex(KeyValuePair<string, string> PrexSignature, string prex = Prex, string key = DefaultKey)
+        {
+            if (PrexSignature.Key != key)
+            {
+                throw new IllegalTokenException("HeaderKey is not equip key");
+            }
+            if (PrexSignature.Value.Substring(0, prex.Length) != prex)
+            {
+                throw new IllegalTokenException("PrexSignature is not equip prex");
+            }
+            return PrexSignature.Value.Substring(prex.Length);
         }
 
         /// <summary>

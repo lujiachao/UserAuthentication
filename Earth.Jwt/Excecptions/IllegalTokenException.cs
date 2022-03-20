@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Earth.Jwt.Excecptions
+namespace Earth.Jwt.Exceptions
 {
     /// <summary>
     /// 非法Token
